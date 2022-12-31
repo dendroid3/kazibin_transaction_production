@@ -29,8 +29,8 @@ class checkRequestIpMiddlware
             return $next($request);
         } else {
             return response() -> json([
-                'error' => 'unauthorised'
-            ], 401);
+                'error' => 'not found'
+            ], 404);
         }
 
     }
