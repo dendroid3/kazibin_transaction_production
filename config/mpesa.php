@@ -8,19 +8,19 @@ return [
     |The App consumer key
     |------------------------------------------
     */
-    'consumer_key'   => 'ZtkRW6ATbVtFpNml5w5SfG26Adfyagn9',
+    'consumer_key'   => env('pd6GdAgYkySt87TtmWaGoEoQBf0Mw2Yv'),
 
     /*-----------------------------------------
     |The App consumer Secret
     |------------------------------------------
     */
-    'consumer_secret' => 'dosFI1yQ8bvHEVFw',
+    'consumer_secret' => env('MPESA_CONSUMER_SECRET'),
 
     /*-----------------------------------------
     |The paybill number
     |------------------------------------------
     */
-    'paybill'         => 601380,
+    'paybill' => env('MPESA_PAYBILL'),
 
     /*-----------------------------------------
     |Lipa Na Mpesa Online Shortcode
@@ -62,13 +62,13 @@ return [
     |C2B  Validation url
     |------------------------------------------
     */
-    'c2b_validate_callback' => 'https://b2d7e6a4.ngrok.io/api/validate?key=ertyuiowwws',
+    'c2b_validate_callback' => env('MPESA_VALIDATION_URL'),
 
     /*-----------------------------------------
     |C2B confirmation url
     |------------------------------------------
     */
-    'c2b_confirm_callback' => 'https://b2d7e6a4.ngrok.io/api/confirm?key=ertyuiowwws',
+    'c2b_confirm_callback' => env('MPESA_CONFIRMATION_URL'),
 
     /*-----------------------------------------
     |B2C timeout url

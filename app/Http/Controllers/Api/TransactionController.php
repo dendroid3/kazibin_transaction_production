@@ -13,24 +13,7 @@ use Mpesa;
 
 class TransactionController extends Controller
 {
-    public function getAccessToken()
-    {
-        $authorization = base64_encode(env('MPESA_CONSUMER_KEY') . ":" . env('MPESA_CONSUMER_SECRET'));
-        $ch = curl_init('https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials');
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Basic ' . $authorization]);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        // curl_setopt($ch, CURLOPT_CAINFO, 'SandboxCertificate.cer');
-        $response = curl_exec($ch);
-
-        if (curl_errno($ch)) {
-            Log::info(curl_error($ch));
-        }
-
-        curl_close($ch);
-        return json_decode($response);
-    }
-
+  
     public function confirmTransaction(Request $request)
     {
         $transaction = DB::table('mpesas') -> insert([
@@ -60,61 +43,69 @@ class TransactionController extends Controller
 
     public function registerUrl(Request $request)
     {
-        $authorization = base64_encode(env('MPESA_CONSUMER_KEY') . ":" . env('MPESA_CONSUMER_SECRET'));
-        $authorization = $this -> getAccessToken() -> access_token;
-        Log::info($authorization);
-        $payload = [
-            'ShortCode' => '4115361',
-            'ResponseType' => 'Completed',
-            "ConfirmationURL" => "https://f63e-197-232-141-33.ngrok-free.app/api/mobile_money/confirmation",
-            "ValidationURL" => "https://f63e-197-232-141-33.ngrok-free.app/api/mobile_money/validation"
-        ];
+        // $authorization = base64_encode(env('MPESA_CONSUMER_KEY') . ":" . env('MPESA_CONSUMER_SECRET'));
+        // $authorization = $this -> getAccessToken() -> access_token;
+        // Log::info($authorization);
+        // $payload = [
+        //     'ShortCode' => env('MPESA_PAYBILL'),
+        //     'ResponseType' => 'Completed',
+        //     "ConfirmationURL" => env('MPESA_CONFIRMATION_URL'),
+        //     "ValidationURL" => env('MPESA_VALIDATION_URL')
+        // ];
 
-        $ch = curl_init('https://sandbox.safaricom.co.ke/mpesa/c2b/v2/registerurl');
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Authorization: Bearer ' . $authorization,
-            'Content-Type: application/json'
-        ]);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        // $ch = curl_init('https://sandbox.safaricom.co.ke/mpesa/c2b/v2/registerurl');
+        // curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        //     'Authorization: Bearer ' . $authorization,
+        //     'Content-Type: application/json'
+        // ]);
+        // curl_setopt($ch, CURLOPT_POST, 1);
+        // curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 
-        $response = curl_exec($ch);
+        // $response = curl_exec($ch);
+        // $registerUrlsResponse = Mpesa::c2bRegisterUrls();
+        // Log::info($registerUrlsResponse);
 
-        Log::info($response);
-
-        if (curl_errno($ch)) {
-            Log::info(curl_error($ch));
-        }
+        // if (curl_errno($ch)) {
+        //     Log::info(curl_error($ch));
+        // }
     }
 
     public function simulate(Request $request)
     {
-        $authorization = base64_encode(env('MPESA_CONSUMER_KEY') . ":" . env('MPESA_CONSUMER_SECRET'));
-        $authorization = $this -> getAccessToken() -> access_token;
+        // $authorization = base64_encode(env('MPESA_CONSUMER_KEY') . ":" . env('MPESA_CONSUMER_SECRET'));
+        // $authorization = $this -> getAccessToken() -> access_token;
         $payload = [
-            'ShortCode' => '4115361',
+            'ShortCode' => env('MPESA_PAYBILL'),
             'CommandID' => 'CustomerPayBillOnline',
-            'Amount' => 200,
+            'Amount' => 1,
             'Msisdn' => '254708374149',
-            'BillRefNumber' => 'TestABC'
+            'BillRefNumber' => 'TestABC',
+            'authorization' => 'cGQ2R2RBZ1lreVN0ODdUdG1XYUdvRW9RQmYwTXcyWXY6eU1aWmVaZWExUndNOEpabw==',
+            'token' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvc2FmYXJpY29tLmNvLmtlIiwiYXVkIjoiaHR0cHM6XC9cL3NhZmFyaWNvbS5jby5rZSIsImlhdCI6MTY5NTcxOTAwMywibmJmIjoxNjk1NzE5MDAzLCJleHAiOjE2OTU3MjI2MDMsImRhdGEiOnsiRmlyc3ROYW1lIjoiRGVuaXMiLCJMYXN0TmFtZSI6Ik13YW5naSIsInVzZXJuYW1lIjoia2F6aWJpbiIsIkVtYWlsQWRkcmVzcyI6ImthemliaW42NkBnbWFpbC5jb20iLCJQaG9uZU51bWJlciI6IisyNTQgNzA1IDcxNTA5OSIsImF2YXRhciI6IiIsIkZpcnN0VGltZUxvZ2luIjpmYWxzZX19.5FZmBhcovkuy7mOrA35cxDZR1Y2cPqLD1r0ERa0-VaY'
         ];
 
-        $ch = curl_init('https://sandbox.safaricom.co.ke/mpesa/c2b/v1/simulate');
+        $ch = curl_init('https://developer.safaricom.co.ke/api/v1/APIs/API/Simulate/CustomerToBusinessSimulate');
 
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Authorization: Bearer ' . $authorization,
-            'Content-Type: application/json'
-        ]);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+        // curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        //     'Authorization: Bearer ' . 'uMMRIPVt10blJqqJ1hRibkUAhkVC',
+        //     'Content-Type: application/json'
+        // ]);
+        // curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 
         $response = curl_exec($ch);
 
         Log::info($response);
+
+        // $simulateResponse=Mpesa::simulateC2B(100, "254708374149", "Testing");
+
+        // Log::info('simulateResponse');
+        // Log::info($simulateResponse);
+
 
         if (curl_errno($ch)) {
             Log::info(curl_error($ch));
