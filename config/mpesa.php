@@ -8,7 +8,7 @@ return [
     |The App consumer key
     |------------------------------------------
     */
-    'consumer_key'   => env('pd6GdAgYkySt87TtmWaGoEoQBf0Mw2Yv'),
+    'consumer_key' => env('MPESA_CONSUMER_KEY'),
 
     /*-----------------------------------------
     |The App consumer Secret
@@ -63,7 +63,6 @@ return [
     |------------------------------------------
     */
     'c2b_validate_callback' => env('MPESA_VALIDATION_URL'),
-
     /*-----------------------------------------
     |C2B confirmation url
     |------------------------------------------
